@@ -1,0 +1,52 @@
+# CMake package config file for mylib library.
+#
+# The following target is imported:
+#
+#   mylib::mylib
+#
+# Type of target to import (static or shared) is determined by the following algorithm:
+#
+#   1. if MYLIB_SHARED_LIBS is defined and:
+#     1.1 is true, then import shared library target or issue error
+#     1.2 is false, then import static library target or issue error
+#
+#   2. if BUILD_SHARED_LIBS is true and file containing shared library target definition exists,
+#      then import shared library target
+#
+#   3. if file containing static library target definition exists, then import static library target
+#
+#   4. import shared library target or issue error
+
+@PACKAGE_INIT@
+
+macro(import_targets type)
+    if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-${type}-export.cmake")
+        set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "mylib ${type} libraries were requested but not found")
+        set(${CMAKE_FIND_PACKAGE_NAME}_FOUND OFF)
+        return()
+    endif()
+
+    include("${CMAKE_CURRENT_LIST_DIR}/mylib-${type}-export.cmake")
+endmacro()
+
+if(NOT TARGET mylib::mylib)
+    set(type "")
+
+    if(DEFINED MYLIB_SHARED_LIBS)
+        if(MYLIB_SHARED_LIBS)
+            set(type "shared")
+        else()
+            set(type "static")
+        endif()
+    elseif(BUILD_SHARED_LIBS AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-shared-export.cmake")
+        set(type "shared")
+    elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-static-export.cmake")
+        set(type "static")
+    else()
+        set(type "shared")
+    endif()
+
+    import_targets(${type})
+    check_required_components(mylib)
+    message("-- Found ${type} mylib (version ${${CMAKE_FIND_PACKAGE_NAME}_VERSION})")
+endif()

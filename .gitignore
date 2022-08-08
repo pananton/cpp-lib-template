@@ -1,0 +1,7 @@
+# Build folders
+build*/
+_build*/
+cmake-build*/
+
+# Mac
+.DS_Store

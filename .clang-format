@@ -1,0 +1,85 @@
+---
+Language: Cpp
+Standard: c++17
+UseTab: Never
+TabWidth: 4
+IndentWidth: 4
+ColumnLimit: 120
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: false
+  AfterClass: false
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakBeforeBinaryOperators: None
+BreakConstructorInitializers: AfterColon
+PackConstructorInitializers: CurrentLine
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: Yes
+
+AlignAfterOpenBracket: true
+AlignEscapedNewlines: Left
+AlignTrailingComments: true
+AlignOperands: Align
+
+IndentCaseBlocks: true
+IndentCaseLabels: false
+IndentExternBlock: Indent
+IndentPPDirectives: AfterHash
+IndentWrappedFunctionNames: true
+AccessModifierOffset: -4
+NamespaceIndentation: None
+
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: false
+SpaceBeforeInheritanceColon: false
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: false
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: true
+SpaceInEmptyParentheses: false
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+AllowAllArgumentsOnNextLine: true
+BinPackArguments: false
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackParameters: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortEnumsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortLambdasOnASingleLine: All
+
+CompactNamespaces: true
+Cpp11BracedListStyle: true
+EmptyLineBeforeAccessModifier: Always
+KeepEmptyLinesAtTheStartOfBlocks: true
+MaxEmptyLinesToKeep: 1
+PenaltyReturnTypeOnItsOwnLine: 1000
+PointerAlignment: Left
+SortUsingDeclarations: false
