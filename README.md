@@ -9,3 +9,5 @@ Template repository to be used as a base for creating C++ libraries built with C
   * package systems (conan, vcpkg and others) should be respected, which means that library `CMakeLists.txt` file should contain only **build requirements**, i.e. should not hardcode any compiler/linker flags unless they are absolutely required to build the library
 * Basic [preset](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html) file `CMakePresets.json` which is a modern way (since CMake 3.19) for specifying build options (instead of hardcoding them in the `CMakeLists.txt` or setting on the command line)
 * My personal `.clang-format` for code-style worth trying
+
+Note, that I prefer [googletest](https://github.com/google/googletest) as a testing framework so it's the one used in this repository. Still it's not a big deal to replace it with any other of your choice.
