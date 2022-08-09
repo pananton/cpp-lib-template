@@ -92,7 +92,7 @@ set_target_properties(mylib PROPERTIES
     SOVERSION ${PROJECT_VERSION_MAJOR}
     VERSION ${PROJECT_VERSION})
 
-if(MYLIB_INSTALL)
+if(MYLIB_INSTALL AND NOT CMAKE_SKIP_INSTALL_RULES)
     configure_package_config_file(cmake/mylib-config.cmake.in mylib-config.cmake
         INSTALL_DESTINATION "${MYLIB_INSTALL_CMAKEDIR}")
 
