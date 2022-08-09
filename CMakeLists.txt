@@ -44,7 +44,7 @@ list(APPEND defined_targets mylib)
 # mylib dependencies
 #----------------------------------------------------------------------------------------------------------------------
 
-#find_package(Boost 1.77.0 REQUIRED COMPONENTS system)
+# Search for your dependencies here
 
 #----------------------------------------------------------------------------------------------------------------------
 # mylib sources
