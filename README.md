@@ -12,4 +12,4 @@ Simple template repository to be used as a base for creating C++ libraries built
 
 Note, that I prefer [googletest](https://github.com/google/googletest) as a testing framework so it's the one used in this repository. Still it's not a big deal to replace it with any other of your choice.
 
-See also [cmake-init](https://github.com/friendlyanon/cmake-init) which is developed under the same principles as this repository but offers much more: CMake executable/library project generation, support for linter/coverage tools for generated projects, etc.
+See also [cmake-init](https://github.com/friendlyanon/cmake-init) tool which is developed under the same principles as this repository but offers much more: CMake executable/library project generation, integrated support for linter/coverage tools for generated projects, etc.
