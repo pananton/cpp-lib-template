@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 project(mylib-add LANGUAGES CXX)
-include("../../cmake/utils.cmake")
 
-find_package(mylib REQUIRED)
+include("../../cmake/utils.cmake")
+set_project_is_top_level()
+
+if(PROJECT_IS_TOP_LEVEL)
+    find_package(mylib REQUIRED)
+endif()
 
 set(sources main.cpp)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${sources})

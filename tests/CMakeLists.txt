@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.14)
 project(mylib-tests)
+
 include("../cmake/utils.cmake")
+set_project_is_top_level()
 
 #----------------------------------------------------------------------------------------------------------------------
 # general settings and options
 #----------------------------------------------------------------------------------------------------------------------
 
-string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
-
-if(is_top_level)
+if(PROJECT_IS_TOP_LEVEL)
     enable_testing()
 endif()
 
@@ -32,7 +32,9 @@ FetchContent_MakeAvailable(googletest)
 # tests dependencies
 #----------------------------------------------------------------------------------------------------------------------
 
-find_package(mylib REQUIRED)
+if(PROJECT_IS_TOP_LEVEL)
+    find_package(mylib REQUIRED)
+endif()
 
 #----------------------------------------------------------------------------------------------------------------------
 # tests sources

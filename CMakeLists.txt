@@ -4,41 +4,37 @@ project(mylib
     DESCRIPTION "Template for C++ library built with CMake"
     LANGUAGES CXX)
 
+include(cmake/utils.cmake)
+set_project_is_top_level()
+
+add_library(mylib) # initialized below
+add_library(mylib::mylib ALIAS mylib)
+
 #----------------------------------------------------------------------------------------------------------------------
 # general settings and options
 #----------------------------------------------------------------------------------------------------------------------
 
-include(cmake/utils.cmake)
 include(GNUInstallDirs)
-
-string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
 
 # MYLIB_SHARED_LIBS option (undefined by default) can be used to force shared/static build
 option(MYLIB_BUILD_TESTS "Build mylib tests" OFF)
 option(MYLIB_BUILD_EXAMPLES "Build mylib examples" OFF)
 option(MYLIB_BUILD_DOCS "Build mylib documentation" OFF)
-option(MYLIB_INSTALL "Generate target for installing mylib" ${is_top_level})
+option(MYLIB_INSTALL "Generate target for installing mylib" ${PROJECT_IS_TOP_LEVEL})
+set_if_undefined(MYLIB_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/mylib-${PROJECT_VERSION}" CACHE
+    STRING "Install path for mylib package-related CMake files")
+
+if(DEFINED MYLIB_SHARED_LIBS)
+    set(BUILD_SHARED_LIBS ${MYLIB_SHARED_LIBS})
+endif()
 
 if(NOT DEFINED CMAKE_BUILD_TYPE AND NOT DEFINED CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-if(DEFINED MYLIB_SHARED_LIBS)
-    set(BUILD_SHARED_LIBS ${MYLIB_SHARED_LIBS})
-endif()
-
 set_if_undefined(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set_if_undefined(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
-
-set_if_undefined(MYLIB_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/mylib-${PROJECT_VERSION}" CACHE
-    STRING "Install path for mylib package-related CMake files")
-
-add_library(mylib) # initialized below
-add_library(mylib::mylib ALIAS mylib)
-
-# make 'find_package(mylib)' do nothing in subprojects because target is already defined
-list(APPEND defined_targets mylib)
 
 #----------------------------------------------------------------------------------------------------------------------
 # mylib dependencies
@@ -105,15 +101,15 @@ if(MYLIB_INSTALL AND NOT CMAKE_SKIP_INSTALL_RULES)
         ARCHIVE COMPONENT mylib-dev
         PUBLIC_HEADER COMPONENT mylib-dev DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/mylib")
 
-    set(export_file "mylib-shared-export.cmake")
+    set(targets_file "mylib-shared-targets.cmake")
 
     if(NOT BUILD_SHARED_LIBS)
-        set(export_file "mylib-static-export.cmake")
+        set(targets_file "mylib-static-targets.cmake")
     endif()
 
     install(EXPORT mylib_export
         COMPONENT mylib-dev
-        FILE "${export_file}"
+        FILE "${targets_file}"
         DESTINATION "${MYLIB_INSTALL_CMAKEDIR}"
         NAMESPACE mylib::)
 
@@ -148,17 +144,8 @@ endif()
 # other targets
 #----------------------------------------------------------------------------------------------------------------------
 
-# makes 'find_package' skip search for already defined targets in subdirectories
-macro(find_package)
-    string(TOLOWER "${ARG0}" name)
-
-    if(NOT ${name} IN_LIST ${defined_targets})
-        _find_package(${ARGV})
-    endif()
-endmacro()
-
 if(MYLIB_BUILD_TESTS)
-    if(${is_top_level})
+    if(PROJECT_IS_TOP_LEVEL)
         enable_testing()
     endif()
 

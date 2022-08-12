@@ -20,13 +20,13 @@
 @PACKAGE_INIT@
 
 macro(import_targets type)
-    if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-${type}-export.cmake")
+    if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-${type}-targets.cmake")
         set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "mylib ${type} libraries were requested but not found")
         set(${CMAKE_FIND_PACKAGE_NAME}_FOUND OFF)
         return()
     endif()
 
-    include("${CMAKE_CURRENT_LIST_DIR}/mylib-${type}-export.cmake")
+    include("${CMAKE_CURRENT_LIST_DIR}/mylib-${type}-targets.cmake")
 endmacro()
 
 if(NOT TARGET mylib::mylib)
@@ -38,9 +38,9 @@ if(NOT TARGET mylib::mylib)
         else()
             set(type "static")
         endif()
-    elseif(BUILD_SHARED_LIBS AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-shared-export.cmake")
+    elseif(BUILD_SHARED_LIBS AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-shared-targets.cmake")
         set(type "shared")
-    elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-static-export.cmake")
+    elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/mylib-static-targets.cmake")
         set(type "static")
     else()
         set(type "shared")
