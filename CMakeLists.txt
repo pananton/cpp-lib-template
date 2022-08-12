@@ -8,22 +8,19 @@ include(cmake/utils.cmake)
 add_library(mylib) # initialized below
 add_library(mylib::mylib ALIAS mylib)
 
+string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
+
 #----------------------------------------------------------------------------------------------------------------------
 # general settings and options
 #----------------------------------------------------------------------------------------------------------------------
 
 include(GNUInstallDirs)
 
-if(NOT DEFINED PROJECT_IS_TOP_LEVEL AND "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
-    # support older CMake versions (prior 3.21) which do not define this variable
-    set(PROJECT_IS_TOP_LEVEL YES)
-endif()
-
 # MYLIB_SHARED_LIBS option (undefined by default) can be used to force shared/static build
 option(MYLIB_BUILD_TESTS "Build mylib tests" OFF)
 option(MYLIB_BUILD_EXAMPLES "Build mylib examples" OFF)
 option(MYLIB_BUILD_DOCS "Build mylib documentation" OFF)
-option(MYLIB_INSTALL "Generate target for installing mylib" ${PROJECT_IS_TOP_LEVEL})
+option(MYLIB_INSTALL "Generate target for installing mylib" ${is_top_level})
 set_if_undefined(MYLIB_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/mylib-${PROJECT_VERSION}" CACHE
     STRING "Install path for mylib package-related CMake files")
 
@@ -148,7 +145,7 @@ endif()
 #----------------------------------------------------------------------------------------------------------------------
 
 if(MYLIB_BUILD_TESTS)
-    if(PROJECT_IS_TOP_LEVEL)
+    if(is_top_level)
         enable_testing()
     endif()
 
