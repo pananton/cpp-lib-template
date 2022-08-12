@@ -1,12 +1,15 @@
 cmake_minimum_required(VERSION 3.14)
 project(mylib-tests)
-
 include("../cmake/utils.cmake")
-set_project_is_top_level()
 
 #----------------------------------------------------------------------------------------------------------------------
 # general settings and options
 #----------------------------------------------------------------------------------------------------------------------
+
+if(NOT DEFINED PROJECT_IS_TOP_LEVEL AND "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+    # support older CMake versions (prior 3.21) which do not define this variable
+    set(PROJECT_IS_TOP_LEVEL YES)
+endif()
 
 if(PROJECT_IS_TOP_LEVEL)
     enable_testing()
@@ -56,7 +59,9 @@ target_link_libraries(mylib-tests
         mylib::mylib
         gtest_main)
 
-win_copy_deps_to_target_dir(mylib-tests mylib::mylib)
+if(NOT PROJECT_IS_TOP_LEVEL)
+    win_copy_deps_to_target_dir(mylib-tests mylib::mylib)
+endif()
 
 include(GoogleTest)
 gtest_discover_tests(mylib-tests)

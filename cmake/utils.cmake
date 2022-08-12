@@ -7,30 +7,14 @@ macro(set_if_undefined variable)
     endif()
 endmacro()
 
-# set_project_is_top_level()
-#
-# Sets variable PROJECT_IS_TOP_LEVEL for older CMake versions.
-macro(set_project_is_top_level)
-    if(NOT DEFINED PROJECT_IS_TOP_LEVEL)
-        if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
-            set(PROJECT_IS_TOP_LEVEL YES)
-        else()
-            set(PROJECT_IS_TOP_LEVEL NO)
-        endif()
-    endif()
-endmacro()
-
 # win_copy_deps_to_target_dir(<target> [<target-dep>]...)
 #
 # Creates custom command to copy runtime dependencies to target's directory after building the target.
-# Function does nothing if platform is not Windows or current project is built as stand-alone (top-level)
-# project. Additionally, it ignores all dependencies except shared libraries.
+# Function does nothing if platform is not Windows and ignores all dependencies except shared libraries.
 # On CMake 3.21 or newer, function uses TARGET_RUNTIME_DLLS generator expression to obtain list of runtime
 # dependencies. Specified dependencies (if any) are still used to find and copy PDB files for debug builds.
 function(win_copy_deps_to_target_dir target)
-    set_project_is_top_level()
-
-    if(NOT WIN32 OR PROJECT_IS_TOP_LEVEL)
+    if(NOT WIN32)
         return()
     endif()
 

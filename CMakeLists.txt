@@ -3,9 +3,7 @@ project(mylib
     VERSION 1.0.0
     DESCRIPTION "Template for C++ library built with CMake"
     LANGUAGES CXX)
-
 include(cmake/utils.cmake)
-set_project_is_top_level()
 
 add_library(mylib) # initialized below
 add_library(mylib::mylib ALIAS mylib)
@@ -15,6 +13,11 @@ add_library(mylib::mylib ALIAS mylib)
 #----------------------------------------------------------------------------------------------------------------------
 
 include(GNUInstallDirs)
+
+if(NOT DEFINED PROJECT_IS_TOP_LEVEL AND "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+    # support older CMake versions (prior 3.21) which do not define this variable
+    set(PROJECT_IS_TOP_LEVEL YES)
+endif()
 
 # MYLIB_SHARED_LIBS option (undefined by default) can be used to force shared/static build
 option(MYLIB_BUILD_TESTS "Build mylib tests" OFF)
