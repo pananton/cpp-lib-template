@@ -21,8 +21,8 @@ option(MYLIB_BUILD_TESTS "Build mylib tests" OFF)
 option(MYLIB_BUILD_EXAMPLES "Build mylib examples" OFF)
 option(MYLIB_BUILD_DOCS "Build mylib documentation" OFF)
 option(MYLIB_INSTALL "Generate target for installing mylib" ${is_top_level})
-set_if_undefined(MYLIB_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/mylib-${PROJECT_VERSION}" CACHE
-    STRING "Install path for mylib package-related CMake files")
+set_if_undefined(MYLIB_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/mylib-${PROJECT_VERSION}" CACHE STRING
+    "Install path for mylib package-related CMake files")
 
 if(DEFINED MYLIB_SHARED_LIBS)
     set(BUILD_SHARED_LIBS ${MYLIB_SHARED_LIBS})
@@ -145,10 +145,7 @@ endif()
 #----------------------------------------------------------------------------------------------------------------------
 
 if(MYLIB_BUILD_TESTS)
-    if(is_top_level)
-        enable_testing()
-    endif()
-
+    enable_testing()
     add_subdirectory(tests)
 endif()
 
