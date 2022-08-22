@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 project(mylib-tests)
-include("../cmake/utils.cmake")
-
-string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
 
 #----------------------------------------------------------------------------------------------------------------------
 # general settings and options
 #----------------------------------------------------------------------------------------------------------------------
+
+include("../cmake/utils.cmake")
+string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
 
 if(is_top_level)
     enable_testing()
