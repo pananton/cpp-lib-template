@@ -3,18 +3,15 @@ project(mylib
     VERSION 1.0.0
     DESCRIPTION "Template for C++ library built with CMake"
     LANGUAGES CXX)
-include(cmake/utils.cmake)
-
-add_library(mylib) # initialized below
-add_library(mylib::mylib ALIAS mylib)
-
-string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
 
 #----------------------------------------------------------------------------------------------------------------------
 # general settings and options
 #----------------------------------------------------------------------------------------------------------------------
 
+include(cmake/utils.cmake)
 include(GNUInstallDirs)
+
+string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
 
 # MYLIB_SHARED_LIBS option (undefined by default) can be used to force shared/static build
 option(MYLIB_BUILD_TESTS "Build mylib tests" OFF)
@@ -36,6 +33,9 @@ endif()
 set_if_undefined(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set_if_undefined(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
+add_library(mylib) # initialized below
+add_library(mylib::mylib ALIAS mylib)
+
 #----------------------------------------------------------------------------------------------------------------------
 # mylib dependencies
 #----------------------------------------------------------------------------------------------------------------------
@@ -55,16 +55,11 @@ endif()
 
 generate_export_header(mylib EXPORT_FILE_NAME include/mylib/${export_file_name})
 
-set(public_headers
-    include/mylib/export.h
-    include/mylib/mylib.h)
 set(sources
-    ${public_headers}
+    include/mylib/export.h
+    include/mylib/mylib.h
     src/mylib.cpp)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${sources})
-
-list(APPEND public_headers "${CMAKE_CURRENT_BINARY_DIR}/include/mylib/${export_file_name}")
-list(APPEND sources "${CMAKE_CURRENT_BINARY_DIR}/include/mylib/${export_file_name}")
 
 #----------------------------------------------------------------------------------------------------------------------
 # mylib target
@@ -84,7 +79,6 @@ target_include_directories(mylib
         "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set_target_properties(mylib PROPERTIES
-    PUBLIC_HEADER "${public_headers}"
     SOVERSION ${PROJECT_VERSION_MAJOR}
     VERSION ${PROJECT_VERSION})
 
@@ -98,8 +92,13 @@ if(MYLIB_INSTALL AND NOT CMAKE_SKIP_INSTALL_RULES)
     install(TARGETS mylib EXPORT mylib_export
         RUNTIME COMPONENT mylib
         LIBRARY COMPONENT mylib NAMELINK_COMPONENT mylib-dev
-        ARCHIVE COMPONENT mylib-dev
-        PUBLIC_HEADER COMPONENT mylib-dev DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/mylib")
+        ARCHIVE COMPONENT mylib-dev)
+    install(DIRECTORY include/
+        COMPONENT mylib-dev
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/mylib/${export_file_name}"
+        COMPONENT mylib-dev
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/mylib")
 
     set(targets_file "mylib-shared-targets.cmake")
 
