@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.15)
 project(mylib
     VERSION 1.0.0
     DESCRIPTION "Template for C++ library built with CMake"
@@ -18,7 +18,7 @@ option(MYLIB_BUILD_TESTS "Build mylib tests" OFF)
 option(MYLIB_BUILD_EXAMPLES "Build mylib examples" OFF)
 option(MYLIB_BUILD_DOCS "Build mylib documentation" OFF)
 option(MYLIB_INSTALL "Generate target for installing mylib" ${is_top_level})
-set_if_undefined(MYLIB_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/mylib-${PROJECT_VERSION}" CACHE STRING
+set_if_undefined(MYLIB_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/mylib" CACHE STRING
     "Install path for mylib package-related CMake files")
 
 if(DEFINED MYLIB_SHARED_LIBS)
@@ -73,10 +73,7 @@ target_compile_definitions(mylib PUBLIC "$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:M
 target_include_directories(mylib
     PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
-        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
-    PRIVATE
-        "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>")
 
 set_target_properties(mylib PROPERTIES
     SOVERSION ${PROJECT_VERSION_MAJOR}
@@ -92,10 +89,11 @@ if(MYLIB_INSTALL AND NOT CMAKE_SKIP_INSTALL_RULES)
     install(TARGETS mylib EXPORT mylib_export
         RUNTIME COMPONENT mylib
         LIBRARY COMPONENT mylib NAMELINK_COMPONENT mylib-dev
-        ARCHIVE COMPONENT mylib-dev)
+        ARCHIVE COMPONENT mylib-dev
+        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
     install(DIRECTORY include/
-        COMPONENT mylib-dev
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+        TYPE INCLUDE
+        COMPONENT mylib-dev)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/mylib/${export_file_name}"
         COMPONENT mylib-dev
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/mylib")
