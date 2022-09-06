@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.14)
 project(mylib
     VERSION 1.0.0
     DESCRIPTION "Template for C++ library built with CMake"
