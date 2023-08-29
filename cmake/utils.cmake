@@ -24,25 +24,28 @@ function(win_copy_deps_to_target_dir target)
         set(has_runtime_dll_genex YES)
 
         add_custom_command(TARGET ${target} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -P "${mylib_SOURCE_DIR}/cmake/silent_copy.cmake"
+                COMMAND ${CMAKE_COMMAND} -P "${mylib_SOURCE_DIR}/cmake/silent_copy.cmake"
                 "$<TARGET_RUNTIME_DLLS:${target}>" "$<TARGET_FILE_DIR:${target}>"
-            COMMAND_EXPAND_LISTS)
+                COMMAND_EXPAND_LISTS)
     endif()
 
     foreach(dep ${ARGN})
         get_target_property(dep_type ${dep} TYPE)
-
+        set(pdb_files "")
+        if (MSVC)
+            set(pdb_files "$<TARGET_PDB_FILE:${dep}>")
+        endif()
         if(dep_type STREQUAL "SHARED_LIBRARY")
             if(NOT has_runtime_dll_genex)
                 add_custom_command(TARGET ${target} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -P "${mylib_SOURCE_DIR}/cmake/silent_copy.cmake" 
-                        "$<TARGET_FILE:${dep}>" "$<TARGET_PDB_FILE:${dep}>" "$<TARGET_FILE_DIR:${target}>"
-                    COMMAND_EXPAND_LISTS)
+                        COMMAND ${CMAKE_COMMAND} -P "${mylib_SOURCE_DIR}/cmake/silent_copy.cmake"
+                        "$<TARGET_FILE:${dep}>" "$pdb_files" "$<TARGET_FILE_DIR:${target}>"
+                        COMMAND_EXPAND_LISTS)
             else()
                 add_custom_command(TARGET ${target} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -P "${mylib_SOURCE_DIR}/cmake/silent_copy.cmake"
-                        "$<TARGET_PDB_FILE:${dep}>" "$<TARGET_FILE_DIR:${target}>"
-                    COMMAND_EXPAND_LISTS)
+                        COMMAND ${CMAKE_COMMAND} -P "${mylib_SOURCE_DIR}/cmake/silent_copy.cmake"
+                        "$pdb_files" "$<TARGET_FILE_DIR:${target}>"
+                        COMMAND_EXPAND_LISTS)
             endif()
         endif()
     endforeach()
